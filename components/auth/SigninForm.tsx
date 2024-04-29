@@ -17,7 +17,7 @@ import toast from 'react-hot-toast';
 
 const getUsernamesFromDB = async () => {
     try {
-        const res = await fetch(`${process.env.API_URL}/api/accounts`, {
+        const res = await fetch(`/api/accounts`, {
             method: "GET",
             cache: "no-store"
         })
@@ -38,6 +38,7 @@ export default function SigninForm() {
         }
     })
     const onsubmit = async (values: FormProps) => {
+        console.log(process.env.API_URL)
         const validation = loginSchema(values);
         if (validation.username === "" && validation.password === "" && validation.confirmPassword === ""
             && values.password === values.confirmPassword
@@ -58,7 +59,7 @@ export default function SigninForm() {
                 if (!onlineUserUsername) {
                     const formData = { username: values.username, password: values.password };
                     //! post data to database:
-                    const res = await fetch(`${process.env.API_URL}/api/accounts`, {
+                    const res = await fetch(`/api/accounts`, {
                         method: "POST",
                         body: JSON.stringify({ formData }),
                         headers: {
