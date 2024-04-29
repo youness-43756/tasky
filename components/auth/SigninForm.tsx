@@ -38,7 +38,6 @@ export default function SigninForm() {
         }
     })
     const onsubmit = async (values: FormProps) => {
-        console.log(process.env.API_URL)
         const validation = loginSchema(values);
         if (validation.username === "" && validation.password === "" && validation.confirmPassword === ""
             && values.password === values.confirmPassword
