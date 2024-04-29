@@ -13,19 +13,11 @@ import { loginSchema } from "@/formValidation/schema";
 import { Loader } from "lucide-react";
 import clsx from "clsx";
 import toast from 'react-hot-toast';
+import { GetUsernamesFromDB } from "@/lib/getUsernames";
 
 
-const getUsernamesFromDB = async () => {
-    try {
-        const res = await fetch(`/api/accounts`, {
-            method: "GET",
-            cache: "no-store"
-        })
-        return res.json();
-    } catch (error) {
-        console.log(error);
-    }
-}
+
+
 export default function SigninForm() {
     const [isLoading, setisLoading] = useState(false);
     const [message, setMessage] = useState({ username: "", password: "", confirmPassword: "" })
@@ -44,7 +36,7 @@ export default function SigninForm() {
         ) {
             setMessage(validation);
             setisLoading(prev => !prev);
-            const allUsernames = await getUsernamesFromDB();
+            const allUsernames = await GetUsernamesFromDB();
             let onlineUserUsername: string = "";
             if (allUsernames) {
                 allUsernames.map((name: any) => {
@@ -52,11 +44,12 @@ export default function SigninForm() {
                         //? Out of Map()
                         return;
                     }
-                    toast.error("Username already exists.")
+                    toast.error("Username already exists.");
                     return onlineUserUsername = name.username;
                 });
                 if (!onlineUserUsername) {
-                    const formData = { username: values.username, password: values.password };
+                    const username = values.username.toLowerCase().trim();
+                    const formData = { username, password: values.password };
                     //! post data to database:
                     const res = await fetch(`/api/accounts`, {
                         method: "POST",

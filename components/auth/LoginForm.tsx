@@ -25,12 +25,14 @@ export default function LoginForm() {
     const onsubmit = (values: FormProps) => {
         const validation = loginSchema(values);
         if (validation.username === "" && validation.password === "") {
+            const formData = { username: values.username, password: values.password }
             setMessage(validation);
             form.reset();
-            console.log("Send to database: ", values);
+            console.log("Send to database: ", formData);
         } else {
             setMessage(validation);
         }
+
     }
     return (
         <FormWrapper

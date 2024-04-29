@@ -7,8 +7,7 @@ export async function POST(req: any) {
     const body = await req.json();
     const accountData = body.formData;
     const hashed = await hashPass(accountData.password);
-    console.log({ ...accountData, password: hashed });
-    await Account.create(accountData);
+    await Account.create({ ...accountData, password: hashed });
     return NextResponse.json({ message: "account created!" }, { status: 201 });
   } catch (error) {
     return NextResponse.json({ message: "failed", error }, { status: 500 });
