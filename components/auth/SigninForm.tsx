@@ -17,7 +17,7 @@ import toast from 'react-hot-toast';
 
 const getUsernamesFromDB = async () => {
     try {
-        const res = await fetch("http://localhost:3000/api/accounts", {
+        const res = await fetch(`${process.env.API_URL}/api/accounts`, {
             method: "GET",
             cache: "no-store"
         })
@@ -58,7 +58,7 @@ export default function SigninForm() {
                 if (!onlineUserUsername) {
                     const formData = { username: values.username, password: values.password };
                     //! post data to database:
-                    const res = await fetch("/api/accounts", {
+                    const res = await fetch(`${process.env.API_URL}/api/accounts`, {
                         method: "POST",
                         body: JSON.stringify({ formData }),
                         headers: {
