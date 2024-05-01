@@ -1,8 +1,4 @@
 "use client"
-interface FormProps {
-    username: string,
-    password: string
-}
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form"
@@ -10,7 +6,8 @@ import FormWrapper from "./FormWrapper";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { loginSchema } from "@/formValidation/schema";
+import { loginSchema } from "@/lib/formValidation/schema";
+import { FormProps } from "@/lib/dataType/dType";
 
 export default function LoginForm() {
     const form = useForm({
@@ -42,7 +39,7 @@ export default function LoginForm() {
         >
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onsubmit)} className="space-y-4">
-                    <div className="space-y-2">
+                    <div className="space-y-4">
                         <FormField
                             control={form.control}
                             name="username"
@@ -75,7 +72,7 @@ export default function LoginForm() {
                             )}
                         />
                     </div>
-                    <Button size={"full"}>submit</Button>
+                    <Button size={"full"} variant={"sky"}>submit</Button>
                 </form>
             </Form>
         </FormWrapper >

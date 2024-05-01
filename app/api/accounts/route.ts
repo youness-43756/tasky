@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Account from "@/models/accountSchema";
 import hashPass from "@/lib/hashPass";
 
-export async function POST(req: any) {
+export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
     const accountData = body.formData;

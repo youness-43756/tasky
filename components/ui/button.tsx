@@ -11,6 +11,7 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         ghost: "hover:bg-slate-100",
+        sky: "bg-gray-600 text-destructive-foreground hover:bg-gray-700",
         danger:
           "bg-red-500 text-destructive-foreground border-t-4 border-red-600 hover:bg-red-600/90 active:border-0",
         outline: "border border-t-4 border-slate-200 hover:text-accent-foreground hover:bg-slate-100 active:border-0",

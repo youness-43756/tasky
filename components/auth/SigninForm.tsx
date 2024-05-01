@@ -1,24 +1,23 @@
 "use client"
-interface FormProps {
-    username: string,
-    password: string, confirmPassword: string
-}
 import { useForm } from "react-hook-form"
 import FormWrapper from "./FormWrapper";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { loginSchema } from "@/formValidation/schema";
+import { loginSchema } from "@/lib/formValidation/schema";
 import { Loader } from "lucide-react";
 import clsx from "clsx";
 import toast from 'react-hot-toast';
 import { GetUsernamesFromDB } from "@/lib/getUsernames";
+import { useRouter } from "next/navigation";
+import { FormProps } from "@/lib/dataType/dType";
 
 
 
 
 export default function SigninForm() {
+    const route = useRouter()
     const [isLoading, setisLoading] = useState(false);
     const [message, setMessage] = useState({ username: "", password: "", confirmPassword: "" })
 
@@ -38,19 +37,24 @@ export default function SigninForm() {
             setisLoading(prev => !prev);
             const allUsernames = await GetUsernamesFromDB();
             let onlineUserUsername: string = "";
-            if (allUsernames) {
-                allUsernames.map((name: any) => {
-                    if (name.username !== values.username) {
-                        //? Out of Map()
-                        return;
-                    }
-                    toast.error("Username already exists.");
-                    return onlineUserUsername = name.username;
-                });
-                if (!onlineUserUsername) {
-                    const username = values.username.toLowerCase().trim();
-                    const formData = { username, password: values.password };
-                    //! post data to database:
+
+            if (!allUsernames) {
+                toast.error("Please try to refresh the page.");
+                return;
+            }
+            allUsernames.map((name: { username: string; }) => {
+                if (name.username !== values.username) {
+                    //? Out of Map()
+                    return;
+                }
+                toast.error("Username already exists.");
+                return onlineUserUsername = name.username;
+            });
+            if (!onlineUserUsername) {
+                const username = values.username.toLowerCase().trim();
+                const formData = { username, password: values.password };
+                //! post data to database:
+                try {
                     const res = await fetch(`/api/accounts`, {
                         method: "POST",
                         body: JSON.stringify({ formData }),
@@ -58,15 +62,19 @@ export default function SigninForm() {
                             "Content-type": "application/json",
                         },
                     });
-                    if (!res.ok) {
-                        throw new Error("Failed to create your account!");
+                    if (!res.ok && res.status === 404) {
+                        setisLoading(prev => !prev);
+                        return;
                     }
                     toast.success("**Congratulations!** 🎉 You've successfully logged in. Welcome to our platform! 🌟")
                     form.reset();
+                    route.refresh();
+                    route.push("/");
+                } catch (error) {
+                    throw new Error("Failed");
                 }
-                setisLoading(prev => !prev);
             }
-
+            setisLoading(prev => !prev);
         } else {
             setMessage(validation);
         }
@@ -129,7 +137,7 @@ export default function SigninForm() {
                             )}
                         />
                     </div>
-                    <Button size="full" disabled={isLoading}>
+                    <Button size="full" variant={"sky"} disabled={isLoading}>
                         <span className={clsx({ "hidden": isLoading, "block": !isLoading })}>Register</span>
                         <Loader className={clsx("animate-spin", {
                             "hidden": !isLoading,
