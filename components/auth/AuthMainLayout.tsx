@@ -5,7 +5,7 @@ export default function AuthMainLayout() {
     return (
         <div className="flex flex-col gap-6 min-h-screen">
             <Header />
-            <div className="w-full grow flex items-center justify-center">
+            <div className="w-full grow flex items-start justify-center">
                 <AuthFormPage />
             </div>
             <Footer />

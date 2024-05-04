@@ -8,8 +8,13 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { loginSchema } from "@/lib/formValidation/schema";
 import { FormProps } from "@/lib/dataType/dType";
+import { toast } from "react-hot-toast";
+import clsx from "clsx";
+import { Loader } from "lucide-react";
 
 export default function LoginForm() {
+    const [isLoading, setisLoading] = useState(false);
+
     const form = useForm({
         defaultValues: {
             username: "",
@@ -19,13 +24,39 @@ export default function LoginForm() {
     })
     const [message, setMessage] = useState({ username: "", password: "" });
 
-    const onsubmit = (values: FormProps) => {
+    const onsubmit = async (values: FormProps) => {
         const validation = loginSchema(values);
         if (validation.username === "" && validation.password === "") {
             const formData = { username: values.username, password: values.password }
             setMessage(validation);
+            setisLoading(prev => !prev);
+
+            //!
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                toast.error(errorData.message);
+                setisLoading(prev => !prev);
+
+                return;
+            }
+
+            const data = await response.json();
+            if (!data.success) {
+                toast.error(data.message);
+                setisLoading(prev => !prev);
+                return;
+            }
+            toast.success(data.message);
             form.reset();
-            console.log("Send to database: ", formData);
+            setisLoading(prev => !prev);
         } else {
             setMessage(validation);
         }
@@ -72,7 +103,13 @@ export default function LoginForm() {
                             )}
                         />
                     </div>
-                    <Button size={"full"} variant={"sky"}>submit</Button>
+                    <Button size="full" variant={"sky"} disabled={isLoading}>
+                        <span className={clsx({ "hidden": isLoading, "block": !isLoading })}>Login</span>
+                        <Loader className={clsx("animate-spin", {
+                            "hidden": !isLoading,
+                            "block": isLoading,
+                        })} />
+                    </Button>
                 </form>
             </Form>
         </FormWrapper >

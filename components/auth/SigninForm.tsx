@@ -9,17 +9,13 @@ import { loginSchema } from "@/lib/formValidation/schema";
 import { Loader } from "lucide-react";
 import clsx from "clsx";
 import toast from 'react-hot-toast';
-import { GetUsernamesFromDB } from "@/lib/getUsernames";
 import { useRouter } from "next/navigation";
 import { FormProps } from "@/lib/dataType/dType";
 
-
-
-
 export default function SigninForm() {
     const route = useRouter()
-    const [isLoading, setisLoading] = useState(false);
     const [message, setMessage] = useState({ username: "", password: "", confirmPassword: "" })
+    const [isLoading, setisLoading] = useState(false);
 
     const form = useForm({
         defaultValues: {
@@ -35,46 +31,33 @@ export default function SigninForm() {
         ) {
             setMessage(validation);
             setisLoading(prev => !prev);
-            const allUsernames = await GetUsernamesFromDB();
-            let onlineUserUsername: string = "";
-
-            if (!allUsernames) {
-                toast.error("Please try to refresh the page.");
-                return;
-            }
-            allUsernames.map((name: { username: string; }) => {
-                if (name.username !== values.username) {
-                    //? Out of Map()
+            const formData: object = { username: values.username, password: values.password }
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData),
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    toast.error(errorData.message);
+                    setisLoading(prev => !prev);
                     return;
                 }
-                toast.error("Username already exists.");
-                return onlineUserUsername = name.username;
-            });
-            if (!onlineUserUsername) {
-                const username = values.username.toLowerCase().trim();
-                const formData = { username, password: values.password };
-                //! post data to database:
-                try {
-                    const res = await fetch(`/api/accounts`, {
-                        method: "POST",
-                        body: JSON.stringify({ formData }),
-                        headers: {
-                            "Content-type": "application/json",
-                        },
-                    });
-                    if (!res.ok && res.status === 404) {
-                        setisLoading(prev => !prev);
-                        return;
-                    }
-                    toast.success("**Congratulations!** 🎉 You've successfully logged in. Welcome to our platform! 🌟")
-                    form.reset();
-                    route.refresh();
-                    route.push("/");
-                } catch (error) {
-                    throw new Error("Failed");
+                const data = await response.json();
+                if (!data.success) {
+                    toast.error(data.message);
+                    setisLoading(prev => !prev);
+                    return;
                 }
+                toast.success(data.message);
+                form.reset();
+                setisLoading(prev => !prev);
+            } catch (error: any) {
+                console.error('Registration failed:', error.message);
             }
-            setisLoading(prev => !prev);
         } else {
             setMessage(validation);
         }
