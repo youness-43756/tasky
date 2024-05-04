@@ -120,7 +120,7 @@ export default function SigninForm() {
                             )}
                         />
                     </div>
-                    <Button size="full" variant={"sky"} disabled={isLoading}>
+                    <Button size="full" variant={"lime"} disabled={isLoading}>
                         <span className={clsx({ "hidden": isLoading, "block": !isLoading })}>Register</span>
                         <Loader className={clsx("animate-spin", {
                             "hidden": !isLoading,
