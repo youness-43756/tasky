@@ -1,4 +1,4 @@
-import { Roboto, Sansita } from "next/font/google";
+import { Roboto, Sansita, Pacifico } from "next/font/google";
 
 export const roboto = Roboto({
   subsets: ["latin"],
@@ -8,4 +8,9 @@ export const roboto = Roboto({
 export const sansita = Sansita({
   subsets: ["latin"],
   weight: ["400", "700", "800", "900"],
+});
+
+export const pacifico = Pacifico({
+  subsets: ["latin-ext"],
+  weight: ["400"],
 });
