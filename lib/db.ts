@@ -16,7 +16,7 @@ const connectDB = async () => {
     await mongoose.connect(uri, options);
   } catch (error: any) {
     console.error(error.message);
-    // process.exit(1);
+    process.exit(1);
   }
 };
 
