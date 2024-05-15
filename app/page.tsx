@@ -1,9 +1,9 @@
-import AuthenticationPage from "../components/auth/AuthMainLayout";
+import HomePage from "@/components/homePage/homePage";
 
 export default function Home() {
   return (
-    <>
-      <AuthenticationPage />
-    </>
+    <main>
+      <HomePage />
+    </main>
   )
 }

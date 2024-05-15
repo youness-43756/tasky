@@ -1,9 +1,12 @@
 export const loginSchema = (loginData: any) => {
-  let data = { username: "", password: "", confirmPassword: "" };
+  let data = { email: "", name: "", password: "", confirmPassword: "" };
   const dataLength: Number = 6;
 
-  if (loginData.username.length < dataLength) {
-    data = { ...data, username: "*username must be at least 6 long." };
+  if (loginData.name?.length < dataLength) {
+    data = { ...data, name: "*name must be at least 6 long." };
+  }
+  if (loginData.email.length < dataLength) {
+    data = { ...data, email: "*Invalid email." };
   }
   if (loginData.password.length < dataLength) {
     data = { ...data, password: "*password must be at least 6 long." };

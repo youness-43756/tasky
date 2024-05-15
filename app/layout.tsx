@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { roboto } from "@/components/font/font";
+import { roboto } from "@/components/ui/font/font";
 import { Toaster } from "react-hot-toast";
+import ProviderWrapper from "./_provider/providerWrapper";
 
 export const metadata: Metadata = {
   title: "Tasky",
@@ -14,16 +15,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${roboto.className}`}>
-        <div className="bg-gray-50 max-w-[1440px] min-h-screen mx-auto md:px-6 px-3">
-          {children}
-        </div>
-        <Toaster
-          position="top-right"
-          reverseOrder={false}
-        />
-      </body>
-    </html>
+    <ProviderWrapper>
+      <html lang="en">
+        <body className={`${roboto.className}`}>
+          <div className="bg-gray-50 max-w-[1440px] min-h-screen mx-auto md:px-6 px-3">
+            {children}
+          </div>
+          <Toaster
+            position="top-right"
+            reverseOrder={false}
+          />
+        </body>
+      </html>
+    </ProviderWrapper>
   );
 }

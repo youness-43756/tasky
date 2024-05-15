@@ -1,5 +1,6 @@
 export interface FormProps {
-  username: string;
-  password: string;
+  username?: string;
+  email?: string;
+  password?: string;
   confirmPassword?: string;
 }

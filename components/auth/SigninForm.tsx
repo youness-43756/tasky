@@ -11,61 +11,81 @@ import clsx from "clsx";
 import toast from 'react-hot-toast';
 import { useRouter } from "next/navigation";
 import { FormProps } from "@/lib/dataType/dType";
+import { signIn } from "next-auth/react";
 
 export default function SigninForm() {
     const route = useRouter()
-    const [message, setMessage] = useState({ username: "", password: "", confirmPassword: "" })
+    const [message, setMessage] = useState({ email: "", name: "", password: "", confirmPassword: "" })
     const [isLoading, setisLoading] = useState(false);
-
     const form = useForm({
         defaultValues: {
-            username: "",
+            name: "",
+            email: "",
             password: "",
             confirmPassword: "",
         }
     })
     const onsubmit = async (values: FormProps) => {
         const validation = loginSchema(values);
-        if (validation.username === "" && validation.password === "" && validation.confirmPassword === ""
+        if (validation.email === "" && validation.name === "" && validation.password === "" && validation.confirmPassword === ""
             && values.password === values.confirmPassword
         ) {
             setMessage(validation);
             setisLoading(prev => !prev);
-            const formData: object = { username: values.username, password: values.password }
             try {
-                const response = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData),
-                });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    toast.error(errorData.message);
+                const res = await signIn('credentials', {
+                    ...values,
+                    call: "sign-in",
+                    redirect: false,
+                })
+                if (res?.error) {
+                    toast.error("Invalid name or password!");
                     setisLoading(prev => !prev);
                     return;
                 }
-                const data = await response.json();
-                if (!data.success) {
-                    toast.error(data.message);
-                    setisLoading(prev => !prev);
-                    return;
-                }
-                toast.success(data.message);
+                route.push('/dashboard');
+                toast.success("User registered successfully.");
                 form.reset();
                 setisLoading(prev => !prev);
+                return;
             } catch (error: any) {
-                console.error('Registration failed:', error.message);
+                toast.error("Something went wrong!");
             }
+            // const formData: object = { name: values.name, password: values.password }
+            // try {
+            //     const response = await fetch('/api/auth/register', {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         },
+            //         body: JSON.stringify(formData),
+            //     });
+            //     if (!response.ok) {
+            //         const errorData = await response.json();
+            //         toast.error(errorData.message);
+            //         setisLoading(prev => !prev);
+            //         return;
+            //     }
+            //     const data = await response.json();
+            //     if (!data.success) {
+            //         toast.error(data.message);
+            //         setisLoading(prev => !prev);
+            //         return;
+            //     }
+            //     toast.success(data.message);
+            //     form.reset();
+            //     setisLoading(prev => !prev);
+            // } catch (error: any) {
+            //     console.error('Registration failed:', error.message);
+            // }
         } else {
             setMessage(validation);
         }
     }
     return (
         <FormWrapper
-            title="Sign In"
-            backhref="/"
+            title="Sign In to your account"
+            backhref="/auth/login"
             backlabel="Already have an account? Login here!"
         >
             <Form {...form}>
@@ -73,15 +93,30 @@ export default function SigninForm() {
                     <div className="space-y-2">
                         <FormField
                             control={form.control}
-                            name="username"
+                            name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>Full name</FormLabel>
                                     <FormControl>
                                         <Input type="text" placeholder="johndoe123" {...field} />
                                     </FormControl>
                                     <FormMessage>
-                                        {message.username}
+                                        {message.name}
+                                    </FormMessage>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input type="text" placeholder="example321@gmail.com" {...field} />
+                                    </FormControl>
+                                    <FormMessage>
+                                        {message.email}
                                     </FormMessage>
                                 </FormItem>
                             )}

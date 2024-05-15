@@ -1,5 +1,5 @@
 import SideBarLinks from "./sideBarLinks";
-import SideBarBtn from "./sideBarBtn";
+import UserAria from "../avatar/UserAria";
 
 export default function MobileSideBar() {
     return (
@@ -7,7 +7,7 @@ export default function MobileSideBar() {
         bg-background shadow-md border-t-2
             ">
             <SideBarLinks />
-            <SideBarBtn />
+            <UserAria />
         </aside>
     )
 }

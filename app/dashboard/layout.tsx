@@ -1,8 +1,9 @@
-import HierarchyLinks from "@/components/dashboard/hierarchyLinks/hierarchyLinks";
+// import HierarchyLinks from "@/components/dashboard/hierarchyLinks/hierarchyLinks";
+import UserAria from "@/components/dashboard/avatar/UserAria";
 import DesktopSidebar from "@/components/dashboard/sideBar/desktopSidebar";
 import MobileSideBar from "@/components/dashboard/sideBar/mobileSideBar";
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -12,9 +13,7 @@ export default function RootLayout({
             <DesktopSidebar />
             <MobileSideBar />
             <div className="grow py-8">
-                <div className="p-4">
-                    <HierarchyLinks />
-                </div>
+                {/* <UserAria /> */}
                 {children}
             </div>
         </div>

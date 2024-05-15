@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
+import LoginWithGitHub from "./oAuthButtons/LoginWithGithub";
 
 interface FormWrapperProps {
     children: React.ReactNode;
@@ -10,10 +11,13 @@ interface FormWrapperProps {
 
 export default function FormWrapper({ children, title, backhref, backlabel }: FormWrapperProps) {
     return (
-        <div className='grow md:max-w-xs sm:max-w-sm space-y-2 border rounded-xl shadow-md bg-white max-w-[97%] px-4 py-6 h-fit overflow-hidden mt-6'>
-            <header className="text-center text-3xl mb-4 font-medium">
+        <div className='grow md:max-w-sm sm:max-w-md space-y-2  sm:border sm:rounded-xl sm:shadow-md sm:bg-white max-w-[97%] px-4 py-6 h-fit overflow-hidden'>
+            <header className="text-center text-2xl mb-6 font-medium">
                 {title}
             </header>
+            <section>
+                <LoginWithGitHub />
+            </section>
             <div>
                 {children}
             </div>
