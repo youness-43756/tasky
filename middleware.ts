@@ -12,11 +12,11 @@ export default withAuth(
     //? Bring the route that user enter in URL.
     const pathname = request.nextUrl.pathname;
 
-    //? To that a user is already login or NOT. (By geting next-auth.session-token)
+    //? To know that a user is already login or NOT. (By geting next-auth.session-token)
     const isAuth = await getToken({ req: request });
 
     const protectedRoutes = ["/dashboard", "/profile"];
-    const authRoutes = ["/auth/sign-in", '/auth/login'];
+    const authRoutes = ["/auth/sign-in", "/auth/login"];
     const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 
     //? Check if pathname (user route) is in protectedRoutes.

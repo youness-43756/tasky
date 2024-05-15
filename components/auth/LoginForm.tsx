@@ -38,11 +38,11 @@ export default function LoginForm() {
                     redirect: false
                 })
                 if (res?.error) {
-                    route.push('/dashboard');
                     toast.error("Account not found. Sign up now!");
                     setisLoading(prev => !prev);
                     return;
                 }
+                route.push('/dashboard');
                 toast.success("Login successful! Welcome back!");
                 form.reset();
                 setisLoading(prev => !prev);

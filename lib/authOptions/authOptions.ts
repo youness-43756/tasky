@@ -94,14 +94,11 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
     maxAge: 1 * 24 * 60 * 60, //? 1 day
-    // generateSessionToken: () => {
-    //   return randomUUID?.() ?? randomBytes(32).toString("hex");
-    // },
   },
   jwt: {},
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth/:path*",
   },
-  debug: process.env.NODE_ENV === "development",
+  // debug: process.env.NODE_ENV === "development",
 };
