@@ -22,7 +22,7 @@ export default function SideBarLinks() {
                     <Link
                         key={l.label}
                         href={l.href}
-                        className={clsx("flex items-end font-medium p-2 font-medium rounded-md hover:bg-slate-100 hover:text-lime-700", { "sm:border-l-2 border-b-2 border-lime-700 font-semibold text-lime-700": pathname === l.href })}
+                        className={clsx("flex items-end p-2 font-medium rounded-md hover:bg-slate-100 hover:text-lime-700", { "md:border-l-2 md:border-b-0 border-b-2 border-lime-700 font-semibold text-lime-700": pathname === l.href })}
                     >
                         <LinkIcon className="md:w-5 w-7 md:mr-3 m-0" />
                         <p className="md:block hidden text-sm">{l.label}</p>

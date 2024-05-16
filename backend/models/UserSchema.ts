@@ -20,12 +20,11 @@ const UserSchema = new mongoose.Schema<UserDocument>(
     },
     image: {
       type: String,
-      default: " ",
+      default: "",
     },
     password: {
       type: String,
       required: true,
-      unique: true,
     },
   },
   {

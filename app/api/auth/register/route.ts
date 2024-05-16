@@ -1,6 +1,6 @@
 import connectDB from "@/lib/db";
 import { hashPass } from "@/lib/hashPass";
-import User from "@/models/UserSchema";
+import User from "@/backend/models/UserSchema";
 import { NextResponse } from "next/server";
 
 connectDB();

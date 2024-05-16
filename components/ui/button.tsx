@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
         ghost: "hover:bg-slate-100 text-lime-700",
-        superGhost: "bg-slate-100 hover:bg-slate-200 text-lime-700",
+        superGhost: "bg-white border shadow-sm text-accent-foreground hover:bg-slate-100/30",
         gray: "bg-gray-600 text-slate-100 hover:bg-gray-700",
         lime: "bg-lime-600  border-t-4 active:border-0 border-lime-700 text-slate-100 hover:bg-lime-600/90",
         danger:

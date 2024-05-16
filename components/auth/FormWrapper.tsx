@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
-import LoginWithGitHub from "./oAuthButtons/LoginWithGithub";
+import Socials from "./oAuthButtons/Socials";
 
 interface FormWrapperProps {
     children: React.ReactNode;
@@ -16,7 +16,7 @@ export default function FormWrapper({ children, title, backhref, backlabel }: Fo
                 {title}
             </header>
             <section>
-                <LoginWithGitHub />
+                <Socials />
             </section>
             <div>
                 {children}

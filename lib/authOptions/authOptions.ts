@@ -1,8 +1,9 @@
 import { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "../db";
-import User from "@/models/UserSchema";
+import User from "@/backend/models/UserSchema";
 import { hashPass, isSamePass } from "../hashPass";
 
 export const authOptions: NextAuthOptions = {
@@ -11,7 +12,10 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
-
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID as string,
+      clientSecret: process.env.GOOGLE_SECRET as string,
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {},
@@ -60,9 +64,10 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async session({ session, token }) {
-      if (session.user) {
+      if (session.user && token.sub) {
         session.user.email = token.email;
         session.user.name = token.name;
+        session.user.id = token.sub;
       }
       return session;
     },
@@ -74,27 +79,24 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async signIn({ user, account }) {
-      if (account?.provider === "github") {
-        try {
-          await connectDB();
-          const { name, email } = user;
+      try {
+        await connectDB();
+        const { name, email } = user;
 
-          const userExisting = await User.findOne({
-            $or: [{ name }, { email }],
-          });
+        const userExisting = await User.findOne({
+          $or: [{ name }, { email }],
+        });
 
-          const newUser = await User.create({
-            email: user?.email,
-            name: user?.name,
-            image: user?.image,
-            password: "github",
-          });
-          return userExisting ? true : newUser.save();
-        } catch (error) {
-          console.log(error);
-        }
+        const newUser = await User.create({
+          email: user?.email,
+          name: user?.name,
+          image: user?.image,
+          password: await hashPass(user?.name),
+        });
+        return userExisting ? true : newUser.save();
+      } catch (error) {
+        console.log(error);
       }
-      return true;
     },
   },
   session: {
@@ -104,7 +106,8 @@ export const authOptions: NextAuthOptions = {
   jwt: {},
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: "/auth/:path*",
+    signIn: "/auth/login",
+    error: "/auth/error",
   },
   // debug: process.env.NODE_ENV === "development",
 };

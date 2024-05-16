@@ -11,6 +11,6 @@ export const sansita = Sansita({
 });
 
 export const pacifico = Pacifico({
-  subsets: ["latin-ext"],
+  subsets: ["latin"],
   weight: ["400"],
 });
