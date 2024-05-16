@@ -65,9 +65,14 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token }) {
       if (session.user && token.sub) {
+        const { name, email } = token as {
+          name: string;
+          email: string;
+          // id: string;
+        };
         session.user.email = token.email;
         session.user.name = token.name;
-        session.user.id = token.sub;
+        // session.user.id = id;
       }
       return session;
     },
@@ -81,7 +86,10 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account }) {
       try {
         await connectDB();
-        const { name, email } = user;
+        const { name, email } = user as {
+          name: string;
+          email: string;
+        };
 
         const userExisting = await User.findOne({
           $or: [{ name }, { email }],
@@ -91,7 +99,7 @@ export const authOptions: NextAuthOptions = {
           email: user?.email,
           name: user?.name,
           image: user?.image,
-          password: await hashPass(user?.name),
+          password: await hashPass(name),
         });
         return userExisting ? true : newUser.save();
       } catch (error) {
