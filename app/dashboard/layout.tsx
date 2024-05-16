@@ -12,7 +12,7 @@ export default async function RootLayout({
         <div className="flex md:gap-6">
             <DesktopSidebar />
             <MobileSideBar />
-            <div className="grow py-8 bg-red-600 h-[1500px]">
+            <div className="grow py-8">
                 {children}
             </div>
         </div>
