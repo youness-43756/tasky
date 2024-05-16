@@ -9,12 +9,13 @@ import { loginSchema } from "@/lib/formValidation/schema";
 import { FormProps } from "@/lib/dataType/dType";
 import { toast } from "react-hot-toast";
 import clsx from "clsx";
-import { Loader } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
     const route = useRouter();
+    const [err, setErr] = useState(false)
     const [isLoading, setisLoading] = useState(false);
     const [message, setMessage] = useState({ email: "", password: "" });
     const form = useForm({
@@ -38,12 +39,14 @@ export default function LoginForm() {
                     redirect: false
                 })
                 if (res?.error) {
-                    toast.error("Account not found. Sign up now!");
+                    toast.error("Incorrect email or password!");
+                    setErr(prev => !prev);
                     setisLoading(prev => !prev);
                     return;
                 }
+                setErr(false);
                 route.push('/dashboard');
-                toast.success("Login successful! Welcome back!");
+                toast.success("Login successfully! Welcome back!");
                 form.reset();
                 setisLoading(prev => !prev);
                 return;
@@ -98,7 +101,7 @@ export default function LoginForm() {
                                 <FormItem>
                                     <FormLabel>Email</FormLabel>
                                     <FormControl>
-                                        <Input type="text" placeholder="example321@gmail.com..." {...field} />
+                                        <Input type="text" placeholder="example321@gmail.com..." className={clsx(" ", err && "border-red-500 ring-offset-red-200 focus-visible:ring-red-500")} {...field} />
                                     </FormControl>
                                     <FormMessage>
                                         {message.email && message.email}
@@ -114,7 +117,7 @@ export default function LoginForm() {
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
                                     <FormControl>
-                                        <Input type="password" placeholder="******" {...field} />
+                                        <Input type="password" placeholder="******" className={clsx(" ", err && "border-red-500 ring-offset-red-200 focus-visible:ring-red-500")} {...field} {...field} />
                                     </FormControl>
                                     <FormMessage>
                                         {message.password && message.password}
@@ -125,7 +128,7 @@ export default function LoginForm() {
                     </div>
                     <Button size="full" variant={"lime"} disabled={isLoading}>
                         <span className={clsx({ "hidden": isLoading, "block": !isLoading })}>Login</span>
-                        <Loader className={clsx("animate-spin", {
+                        <LoaderCircle className={clsx("animate-spin", {
                             "hidden": !isLoading,
                             "block": isLoading,
                         })} />

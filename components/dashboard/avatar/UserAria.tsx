@@ -1,7 +1,7 @@
 "use client"
 import { useSession } from 'next-auth/react'
 import {
-    Loader,
+    LoaderCircle,
     LogOut,
     User,
     UserRound,
@@ -26,12 +26,13 @@ import SignOutButton from '@/components/auth/oAuthButtons/SignOutButton'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 
+
 export default function UserAria() {
     const pathname = usePathname();
     const { data, status }: { data: Session | null | undefined | string; status: any } = useSession();
     return (
         <div>
-            {status === "loading" && <Loader className="animate-spin" />}
+            {status === "loading" && <LoaderCircle className="animate-spin" />}
             {status === "authenticated" && (
                 <DropdownMenu>
                     <DropdownMenuTrigger>

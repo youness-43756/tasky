@@ -3,7 +3,7 @@ import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "../db";
 import User from "@/models/UserSchema";
-import { hashPass } from "../hashPass";
+import { hashPass, isSamePass } from "../hashPass";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
           const newUser = await User.create({
             name: req?.body?.name,
             email: req?.body?.email,
-            image: req?.body?.image ? req?.body?.image : " ",
+            image: req?.body?.image ? req?.body?.image : "",
             password: hashedPass,
           });
           return userExisting ? null : newUser.save();
@@ -39,14 +39,20 @@ export const authOptions: NextAuthOptions = {
         //? login logic
         if (req?.body?.call === "login" && req.method === "POST") {
           const existingUser = await User.findOne({ email });
-          return existingUser
-            ? {
-                id: existingUser?._id,
-                name: existingUser?.name,
-                email: existingUser?.email,
-                image: existingUser?.image,
-              }
-            : null;
+          if (!existingUser) return null;
+          const isSamePassword = await isSamePass(
+            password,
+            existingUser.password
+          );
+          if (!isSamePassword) return null;
+
+          if (existingUser && isSamePassword)
+            return {
+              id: existingUser?._id,
+              name: existingUser?.name,
+              email: existingUser?.email,
+              image: existingUser?.image,
+            };
         }
       },
     }),

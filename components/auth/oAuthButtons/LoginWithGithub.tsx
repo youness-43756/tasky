@@ -23,7 +23,7 @@ export default function LoginWithGitHub() {
                     Google
                 </label>
             </Button>
-        </main>
+        </main >
     )
 }
 
