@@ -25,6 +25,7 @@ import { type Session } from 'next-auth'
 import SignOutButton from '@/components/auth/oAuthButtons/SignOutButton'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { LoginButton } from '@/components/auth/login-button'
 
 
 export default function UserAria() {
@@ -35,7 +36,7 @@ export default function UserAria() {
             {status === "loading" && <LoaderCircle className="animate-spin" />}
             {status === "authenticated" && (
                 <DropdownMenu>
-                    <DropdownMenuTrigger>
+                    <DropdownMenuTrigger asChild>
                         <Avatar className='cursor-pointer'>
                             <AvatarImage src={`${data?.user?.image}`} alt="avatar" />
                             <AvatarFallback>
@@ -63,9 +64,9 @@ export default function UserAria() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <LogOut className="mr-2 h-4 w-4" />
-                            <span>
-                                <SignOutButton />
-                            </span>
+                            <LoginButton mode='signout'>
+                                Log Out
+                            </LoginButton>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

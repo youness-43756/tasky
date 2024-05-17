@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, type Session } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -65,14 +65,8 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, token }) {
       if (session.user && token.sub) {
-        const { name, email } = token as {
-          name: string;
-          email: string;
-          // id: string;
-        };
-        session.user.email = token.email;
         session.user.name = token.name;
-        // session.user.id = id;
+        session.user.email = token.email;
       }
       return session;
     },
@@ -80,30 +74,32 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.email = user.email;
         token.name = user.name;
+        token.sub = user.id;
       }
       return token;
     },
-    async signIn({ user, account }) {
+    async signIn({ user }) {
       try {
         await connectDB();
         const { name, email } = user as {
           name: string;
           email: string;
         };
-
         const userExisting = await User.findOne({
           $or: [{ name }, { email }],
         });
-
+        if (userExisting) return true;
+        console.log(userExisting);
         const newUser = await User.create({
           email: user?.email,
           name: user?.name,
           image: user?.image,
           password: await hashPass(name),
         });
-        return userExisting ? true : newUser.save();
+
+        return newUser.save();
       } catch (error) {
-        console.log(error);
+        throw new Error("Failed with Oauth!");
       }
     },
   },
