@@ -11,7 +11,6 @@ export const POST = async (req: Request) => {
     email,
     image,
   }: { name: string; id: string; email: string; image: string } = body;
-
   try {
     await connectDB();
     //? Checks if a value can be used to create a valid bson ObjectId
@@ -21,13 +20,14 @@ export const POST = async (req: Request) => {
 
     //? check if user exists:
 
+    //? update user info
     const result = await User.updateOne(
       { _id: id },
       {
         $set: {
           name: name,
           email: email,
-          image: `${process.env.BASE_URL}/${image}`,
+          image: image ? `${process.env.BASE_URL}/${image}` : "",
           updatedAt: new Date(),
         },
       }

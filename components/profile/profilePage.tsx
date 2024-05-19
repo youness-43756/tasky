@@ -10,8 +10,6 @@ import { toast } from "react-hot-toast";
 import { LoaderCircle } from "lucide-react";
 import clsx from "clsx";
 
-
-
 export default function ProfilePage({ data }: ProfilePageProps) {
     const [isLoading, setIsLoading] = useState(false);
     const form = useForm({
@@ -20,14 +18,15 @@ export default function ProfilePage({ data }: ProfilePageProps) {
             email: data?.email,
             image: ""
         }
-    })
+    });
     const onsubmit = async (values: FormProps) => {
         //? Optional Chaining and Nullish Coalescing: Use optional chaining (?.) and nullish coalescing (??) to handle cases where values.image might be undefined.
 
         let newImage: string = "";
         setIsLoading(prev => !prev);
+
         if (!values.email || !values.name) {
-            alert('Invalid input!');
+            toast.error('')
             setIsLoading(prev => !prev);
             return;
         }

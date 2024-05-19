@@ -15,9 +15,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ProviderWrapper>
-      <html lang="en">
-        <body className={`${roboto.className}`}>
+    <html lang="en">
+      <body className={`${roboto.className}`}>
+        <ProviderWrapper>
           <div className="bg-gray-50 max-w-[1440px] min-h-screen mx-auto md:px-6 px-3">
             {children}
           </div>
@@ -25,8 +25,8 @@ export default function RootLayout({
             position="top-right"
             reverseOrder={false}
           />
-        </body>
-      </html>
-    </ProviderWrapper>
+        </ProviderWrapper>
+      </body>
+    </html>
   );
 }
