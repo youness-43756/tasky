@@ -1,3 +1,4 @@
+import connectDB from "@/lib/db";
 import User from "../models/UserSchema";
 
 export const getUserByEmail = async (email: string) => {
@@ -9,10 +10,11 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-export const getUserById = async (id: string | undefined) => {
+export const getUserById = async (id: string) => {
   try {
-    const user = await User.findOne({ where: { id } });
-    return user;
+    await connectDB();
+    const existingUser = await User.findById(id);
+    return existingUser;
   } catch {
     return null;
   }

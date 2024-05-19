@@ -1,14 +1,12 @@
 "use client";
 import Link from "next/link";
 import { HomeIcon } from "lucide-react";
-import { PlusIcon } from "lucide-react";
 import { PieChart } from "lucide-react";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 
 const links = [
     { label: "Home", href: "/dashboard", linkIcon: HomeIcon },
-    { label: "New Task", href: "/dashboard/new-task", linkIcon: PlusIcon },
     { label: "Progress", href: "/dashboard/progress", linkIcon: PieChart },
 ]
 

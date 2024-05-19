@@ -1,10 +1,20 @@
-import { NextAuthOptions, type Session } from "next-auth";
+import { DefaultSession, NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "../db";
 import User from "@/backend/models/UserSchema";
 import { hashPass, isSamePass } from "../hashPass";
+import { getUserById } from "@/backend/getData/user";
+
+//? To include the id property on the user object.
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+    } & DefaultSession["user"];
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -27,6 +37,7 @@ export const authOptions: NextAuthOptions = {
           password: string;
         };
         await connectDB();
+        //? register login
         if (req?.body?.call === "sign-in" && req.method === "POST") {
           const userExisting = await User.findOne({ email });
           const hashedPass = await hashPass(password);
@@ -66,16 +77,23 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user && token.sub) {
         session.user.name = token.name;
+        session.user.id = token.sub;
         session.user.email = token.email;
+        session.user.image = token.picture;
       }
+      //? This is the data that we use in userAria.
       return session;
     },
-    async jwt({ token, user }) {
-      if (user) {
-        token.email = user.email;
-        token.name = user.name;
-        token.sub = user.id;
-      }
+    async jwt({ token }) {
+      if (!token.sub) return token;
+
+      const isUser = await getUserById(token.sub);
+      if (!isUser) return token;
+      token.email = isUser.email;
+      token.name = isUser.name;
+      token.picture = isUser.image;
+      token.sub = isUser.id;
+
       return token;
     },
     async signIn({ user }) {

@@ -1,8 +1,10 @@
 "use client"
 import { useSession } from 'next-auth/react'
 import {
+    LayoutDashboard,
     LoaderCircle,
     LogOut,
+    Settings,
     User,
     UserRound,
 } from "lucide-react"
@@ -22,7 +24,6 @@ import {
     AvatarImage,
 } from "@/components/ui/avatar"
 import { type Session } from 'next-auth'
-import SignOutButton from '@/components/auth/oAuthButtons/SignOutButton'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { LoginButton } from '@/components/auth/login-button'
@@ -31,6 +32,7 @@ import { LoginButton } from '@/components/auth/login-button'
 export default function UserAria() {
     const pathname = usePathname();
     const { data, status }: { data: Session | null | undefined | string; status: any } = useSession();
+    console.log({ data })
     return (
         <div>
             {status === "loading" && <LoaderCircle className="animate-spin" />}
@@ -46,28 +48,39 @@ export default function UserAria() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56">
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <User className="mr-2 h-4 w-4" />
-                                <span>Profile</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
                         {pathname === '/' && (
                             <DropdownMenuGroup>
-                                <DropdownMenuItem>
-                                    <User className="mr-2 h-4 w-4" />
-                                    <Link href={'/dashboard'}>Dashboard</Link>
-                                </DropdownMenuItem>
+                                <Link href={'/dashboard'}>
+                                    <DropdownMenuItem>
+                                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                                        Dashboard
+                                    </DropdownMenuItem>
+                                </Link>
                             </DropdownMenuGroup>
                         )}
+                        <DropdownMenuGroup>
+                            <Link href={`/profile/${data?.user?.id}`}>
+                                <DropdownMenuItem>
+                                    <User className="mr-2 h-4 w-4" />
+                                    <span>Profile</span>
+                                </DropdownMenuItem>
+                            </Link>
+                        </DropdownMenuGroup>
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem>
+                                <Settings className="mr-2 h-4 w-4" />
+                                <span>Settings</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            <LogOut className="mr-2 h-4 w-4" />
+                        <DropdownMenuGroup>
                             <LoginButton mode='signout'>
-                                Log Out
+                                <DropdownMenuItem>
+                                    <LogOut className="mr-2 h-4 w-4" />
+                                    Log Out
+                                </DropdownMenuItem>
                             </LoginButton>
-                        </DropdownMenuItem>
+                        </DropdownMenuGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )}
