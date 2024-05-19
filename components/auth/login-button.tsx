@@ -6,18 +6,19 @@ import { useRouter } from "next/navigation";
 interface LoginButtonProps {
     children: React.ReactNode,
     className?: string,
-    mode?: "signin" | "login" | "signout" | "profile"|"dashboard" | string,
-        asChild ?: boolean
+    mode?: "signin" | "login" | "signout" | "profile" | "dashboard" | string,
+    asChild?: boolean
 }
 export const LoginButton = ({ children, mode = "login", asChild }: LoginButtonProps) => {
     const route = useRouter();
     const clickHandler = async () => {
         if (mode === "signin") {
-            return route.push(`${process.env.BASE_URL}/auth/sign-in`)
+            const url = new URL('/auth/sign-in', process.env.BASE_URL);
+            return route.push(`${url}`);
         }
         if (mode === "signout") {
             await signOut({ redirect: true, callbackUrl: "/" });
-            return route.push(`${process.env.BASE_URL}`);
+            return route.push("/");
         }
         if (mode === "profile") {
             return route.push(`/`);
