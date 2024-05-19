@@ -14,7 +14,7 @@ export const LoginButton = ({ children, mode = "login", asChild }: LoginButtonPr
     const clickHandler = async () => {
         if (mode === "signin") {
             const url = new URL('/auth/sign-in', process.env.BASE_URL);
-            return route.push(`${url}`);
+            return route.push(`${url.toString()}`);
         }
         if (mode === "signout") {
             await signOut({ redirect: true, callbackUrl: "/" });
