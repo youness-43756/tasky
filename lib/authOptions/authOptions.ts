@@ -93,7 +93,6 @@ export const authOptions: NextAuthOptions = {
       token.name = isUser.name;
       token.picture = isUser.image;
       token.sub = isUser.id;
-
       return token;
     },
     async signIn({ user }) {

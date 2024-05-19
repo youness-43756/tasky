@@ -13,5 +13,5 @@ export interface ErrorWrapperProps {
 }
 
 export interface ProfilePageProps {
-  data: { name: string; email: string; id: string; image?: string };
+  data: { name: string; email: string; id: string; image: string | "" };
 }
