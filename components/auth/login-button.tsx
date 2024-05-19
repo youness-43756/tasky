@@ -13,15 +13,14 @@ export const LoginButton = ({ children, mode = "login", asChild }: LoginButtonPr
     const route = useRouter();
     const clickHandler = async () => {
         if (mode === "signin") {
-            const url = new URL('/auth/sign-in', process.env.BASE_URL);
-            return route.push(`${url.toString()}`);
+            return route.push("/auth/sign-in");
         }
         if (mode === "signout") {
             await signOut({ redirect: true, callbackUrl: "/" });
             return route.push("/");
         }
         if (mode === "profile") {
-            return route.push(`/`);
+            return route.push("/");
         }
         if (mode === "dashboard") {
             return route.push(`/dashboard`);

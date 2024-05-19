@@ -1,3 +1,4 @@
+"use server"
 import ErrorWrapper from "@/components/auth/errorWrapper";
 import ProfilePage from "@/components/profile/profilePage";
 
