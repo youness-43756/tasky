@@ -10,7 +10,7 @@ export const POST = async (req: Request) => {
 
     //? Checks if a value can be used to create a valid bson ObjectId
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      return NextResponse.json({ message: "Invalid user ID" }, { status: 404 });
+      return NextResponse.json({ message: "Invalid user ID" }, { status: 201 });
     }
 
     await connectDB();

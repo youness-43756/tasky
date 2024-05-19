@@ -19,11 +19,11 @@ export default async function page({ params }: { params: { u: string } }) {
         if (!response.ok) {
             return <ErrorWrapper message={res.message} buttonLabel="Try again!" backUrl="profile" />
         }
+        console.log(res);
         return <ProfilePage data={res.message} />
 
     } catch (error) {
         console.error(error);
     }
-    // }
-    return <ErrorWrapper message={"Ooops! Somethings went wrong!"} buttonLabel="Try again!" backUrl="dashboard" />
+    // return <ErrorWrapper message={"Ooops! Somethings went wrong!"} buttonLabel="Try again!" backUrl="dashboard" />
 }
