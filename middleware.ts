@@ -15,7 +15,8 @@ export default withAuth(
     //? To know that a user is already login or NOT. (By geting next-auth.session-token).
     //* isAuth is the token in callbacks jwt.
     const isAuth = await getToken({ req: request });
-    const protectedRoutes = ["/dashboard", "/profile"];
+    console.log("this is : ", isAuth);
+    const protectedRoutes = ["/dashboard", `/profile/${isAuth?.sub}`];
     const authRoutes = ["/auth/sign-in", "/auth/login"];
     const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
 

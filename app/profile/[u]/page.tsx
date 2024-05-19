@@ -23,9 +23,5 @@ export default async function page({ params }: { params: { u: string } }) {
             console.error(error);
         }
     }
-    return (
-        <div>
-            {JSON.stringify({ params })}
-        </div>
-    )
+    return <ErrorWrapper message={"Ooops! Somethings went wrong!"} buttonLabel="Try again!" backUrl="dashboard" />
 }
