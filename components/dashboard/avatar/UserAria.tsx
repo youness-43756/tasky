@@ -32,7 +32,6 @@ import { LoginButton } from '@/components/auth/login-button'
 export default function UserAria() {
     const pathname = usePathname();
     const { data, status }: { data: Session | null | undefined | string; status: any } = useSession();
-    console.log({ data })
     return (
         <div>
             {status === "loading" && <LoaderCircle className="animate-spin" />}
